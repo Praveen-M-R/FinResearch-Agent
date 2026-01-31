@@ -18,3 +18,15 @@ class DetailedHealthResponse(HealthResponse):
     """Detailed health check response model"""
 
     debug: bool
+
+class ChatRequest(BaseModel):
+    """Chat request model"""
+
+    message: str
+
+
+class ChatResponse(BaseModel):
+    """Chat response model"""
+
+    message: str
+    status: str

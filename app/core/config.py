@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
+    # Google GenAI
+    GOOGLE_GENAI_API_KEY: str
+
 
 # Global settings instance
 settings = Settings()
