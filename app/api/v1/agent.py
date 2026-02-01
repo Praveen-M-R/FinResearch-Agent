@@ -41,7 +41,7 @@ def run_agent(request: ChatRequest):
         print(f"Exception: {e}")
         raise HTTPException(
             status_code=500,
-            detail="We are facing some issues. Please try again later.",
+            detail=f"We are facing some issues. Please try again later.{e}",
         )
 
     return ChatResponse(message=result.output, status="success")
