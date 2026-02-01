@@ -32,7 +32,7 @@ class Settings(BaseSettings):
 
     # Ollama
     OLLAMA_HOST_URL: str = "http://localhost:11434/v1"
-    OLLAMA_MODEL: str = "qwen2.5:1.5b"
+    OLLAMA_MODEL: str = "qwen3:0.6b"
 
 
 # Global settings instance
