@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
 
     # Google GenAI
-    GOOGLE_GENAI_API_KEY: str
+    GOOGLE_GENAI_API_KEY: str = ""
 
     # Ollama
     OLLAMA_HOST_URL: str = "http://localhost:11434/v1"

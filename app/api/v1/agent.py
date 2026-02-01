@@ -16,6 +16,12 @@ def run_agent(request: ChatRequest):
 
     try:
         model = ollama_model
+        if model is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Ollama model is not available. Please check your OLLAMA_HOST_URL configuration.",
+            )
+
         agent = Agent(
             model,
             instructions="Be Professional!",
