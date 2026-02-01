@@ -1,0 +1,40 @@
+services:
+  finresearch-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finresearch-agent
+    ports:
+      - "8000:8000"
+    environment:
+      # Application Configuration
+      - APP_NAME=FinResearch Agent
+      - APP_VERSION=0.1.0
+      - APP_ENVIRONMENT=production
+      - DEBUG=False
+      # Server Configuration
+      - HOST=0.0.0.0
+      - PORT=8000
+      # Google GenAI - Set your API key here or via .env file
+      - GOOGLE_GENAI_API_KEY=${GOOGLE_GENAI_API_KEY}
+      # Ollama - Point to your Hugging Face hosted Ollama instance
+      - OLLAMA_HOST_URL=${OLLAMA_HOST_URL}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen3:0.6b}
+    env_file:
+      - .env
+    volumes:
+      # Mount logs or data directories if needed
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - finresearch-network
+
+networks:
+  finresearch-network:
+    driver: bridge
