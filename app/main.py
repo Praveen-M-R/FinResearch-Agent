@@ -27,21 +27,27 @@ def create_application() -> FastAPI:
         redoc_url="/redoc" if settings.DEBUG else None,
     )
 
-    # Configure CORS for development
-    if settings.DEBUG:
-        app.add_middleware(
-            CORSMiddleware,
-            allow_origins=["*"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
+    # Configure CORS for production and development
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Configure specific origins in production if needed
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # Include API v1 router
     app.include_router(api_router, prefix="/api/v1")
 
-    # Mount static files for UI
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+    # Mount static files for UI (skip on Vercel, as static files are served directly)
+    try:
+        import os
+
+        if os.path.exists("static"):
+            app.mount("/static", StaticFiles(directory="static"), name="static")
+    except Exception:
+        # Static files not available or already handled by Vercel
+        pass
 
     # Redirect root to UI
     @app.get("/")
