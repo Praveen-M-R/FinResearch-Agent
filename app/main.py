@@ -49,11 +49,11 @@ def create_application() -> FastAPI:
         # Static files not available or already handled by Vercel
         pass
 
-    # Redirect root to UI
+    # Root endpoint
     @app.get("/")
     async def root():
-        """Redirect to chat UI"""
-        return RedirectResponse(url="/static/index.html")
+        """Root endpoint - redirect to static UI"""
+        return RedirectResponse(url="/static/index.html", status_code=307)
 
     return app
 
