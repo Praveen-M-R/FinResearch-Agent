@@ -19,4 +19,4 @@ httpx==0.28.1
 python-multipart==0.0.20
 
 # AI / Integrations
-pydantic-ai-slim[google,ag_ui,openai]==1.50.0  
+pydantic-ai-slim[google,ag_ui,openai,duckduckgo]==1.50.0  
