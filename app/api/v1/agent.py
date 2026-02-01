@@ -1,25 +1,10 @@
-import logging
-import sys
-import json
 import time
 from fastapi import APIRouter, HTTPException
 from pydantic_ai import Agent
-from pydantic_ai.messages import ModelRequest, ModelResponse, ToolReturnPart
 from app.core.llm_models import ollama_model
 from app.api.v1.types import ChatRequest, ChatResponse
-from app.agent_tools.web_search import duckduckgo_tool
-
-# 1. Setup Logging to see internal library logs (PydanticAI, HTTPX, etc.)
-# This will print every HTTP request sent to Ollama and internal debug info.
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)],
-)
-
-# Optional: Reduce noise from other libraries if needed
-logging.getLogger("httpcore").setLevel(logging.INFO)
-logging.getLogger("httpx").setLevel(logging.INFO)
+from app.agent_tools.news_search import financial_news_tool
+from app.api.v1.utils import print_agent_execution_steps
 
 router = APIRouter(prefix="/agent")
 
@@ -30,18 +15,21 @@ def run_agent(request: ChatRequest):
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
 
     try:
+        model = ollama_model
         agent = Agent(
-            ollama_model,
+            model,
             instructions="Be Professional!",
-            tools=[duckduckgo_tool],
+            tools=[financial_news_tool],
         )
         start_time = time.time()
         result = agent.run_sync(request.message)
         end_time = time.time()
         print(f"Tokens: {result.usage()}")
+        print(f"Thinking part: {result}")
         print(
-            f"Time: {end_time - start_time} seconds, For {request.message[:10]} with model {ollama_model.model_name}"
+            f"Time: {end_time - start_time} seconds, For {request.message[:10]} with model {model.model_name}\n"
         )
+        print_agent_execution_steps(result)
 
     except Exception as e:
         print(f"Exception: {e}")
