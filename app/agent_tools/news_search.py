@@ -86,7 +86,7 @@ financial_news_tool = Tool(
     Parameters:
     - ticker: stock symbol like 'AAPL', 'MSFT' (optional)
     - query: keywords to filter (optional)
-    - days_back: how many days back (default: 7)
-    - max_results: max articles (default: 10)
+    - days_back: how many days back (default: 30)
+    - max_results: max articles (default: 5)
     """,
 )
