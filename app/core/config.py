@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     OLLAMA_HOST_URL: str = "http://localhost:11434/v1"
     OLLAMA_MODEL: str = "qwen3:0.6b"
 
+    # Google GenAI
+    GOOGLE_API_KEY_1: str = ""
+    GOOGLE_API_KEY_2: str = ""
+
 
 # Global settings instance
 settings = Settings()

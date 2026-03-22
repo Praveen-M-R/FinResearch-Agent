@@ -1,7 +1,7 @@
 import time
 from fastapi import APIRouter, HTTPException
 from pydantic_ai import Agent
-from app.core.llm_models import ollama_model
+from app.core.llm_models import gemini_model
 from app.api.v1.types import ChatRequest, ChatResponse
 from app.agent_tools.news_search import financial_news_tool
 from app.api.v1.utils import print_agent_execution_steps
@@ -15,15 +15,9 @@ def run_agent(request: ChatRequest):
         raise HTTPException(status_code=400, detail="Query cannot be empty.")
 
     try:
-        model = ollama_model
-        if model is None:
-            raise HTTPException(
-                status_code=503,
-                detail="Ollama model is not available. Please check your OLLAMA_HOST_URL configuration.",
-            )
 
         agent = Agent(
-            model,
+            gemini_model,
             instructions="Be Professional!",
             tools=[financial_news_tool],
         )
@@ -33,8 +27,9 @@ def run_agent(request: ChatRequest):
         print(f"Tokens: {result.usage()}")
         print(f"Thinking part: {result}")
         print(
-            f"Time: {end_time - start_time} seconds, For {request.message[:10]} with model {model.model_name}\n"
+            f"Time: {end_time - start_time} seconds, For {request.message[:10]} with model {gemini_model.model_name}\n"
         )
+        print(result.all_messages())
         print_agent_execution_steps(result)
 
     except Exception as e:
